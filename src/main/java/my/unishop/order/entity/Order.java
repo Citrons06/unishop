@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import my.unishop.admin.BaseEntity;
+import my.unishop.member.entity.Address;
 import my.unishop.member.entity.Member;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,10 @@ public class Order extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member user;
+
+    private String order_username;
+    private Address orderAddress;
+    private String order_tel;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();

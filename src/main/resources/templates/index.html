@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body>
+<header class="bg-blue-600 p-4 text-white">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-xl">Uni</h1>
+        <nav>
+            <ul class="flex space-x-4">
+                <li><a href="/user/login" class="hover:text-blue-300">로그인</a></li>
+                <li><a href="/user/signup" class="hover:text-blue-300">회원가입</a></li>
+                <li><a href="/user/mypage" class="hover:text-blue-300">마이페이지</a></li>
+                <li><a href="/cart/cartlist" class="hover:text-blue-300">장바구니</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="bg-blue-700">
+        <div class="container mx-auto py-2">
+            <ul class="flex space-x-4">
+                <li><a href="/items/itemlist?category=1" class="hover:text-blue-300">카테고리1</a></li>
+                <li><a href="/items/itemlist?category=2" class="hover:text-blue-300">카테고리2</a></li>
+                <li><a href="/items/itemlist?category=3" class="hover:text-blue-300">카테고리3</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<main class="container mx-auto mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-4 shadow rounded-lg">
+            <img src="https://via.placeholder.com/150" alt="상품1" class="w-full h-48 mb-4 rounded object-cover">
+            <h3 class="text-lg font-bold">상품1</h3>
+            <p class="text-gray-600 mb-2">상품 설명</p>
+            <div class="flex justify-between items-center">
+                <span class="text-xl font-bold">₩10000</span>
+                <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">장바구니</button>
+            </div>
+        </div>
+        <!-- 반복해서 다른 상품들 추가 -->
+    </div>
+</main>
+
+<footer class="bg-gray-200 text-center p-4 text-sm mt-8">
+    © 2024 Uni. All rights reserved.
+</footer>
+
+</body>
+</html>
