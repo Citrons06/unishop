@@ -10,8 +10,8 @@ public class MemberResponseDto {
 
     private String username;
     private String password;
-    private String tel;
-    private String email;
+    private String memberTel;
+    private String memberEmail;
 
     private String city;
     private String street;
@@ -21,10 +21,10 @@ public class MemberResponseDto {
         this.id = member.getId();
         this.username = member.getUsername();
         this.password = member.getPassword();
-        this.tel = member.getTel();
-        this.email = member.getEmail();
-        this.street = member.getAddress().getStreet();
-        this.city = member.getAddress().getCity();
-        this.zipcode = member.getAddress().getZipcode();
+        this.memberTel = member.getMemberTel();
+        this.memberEmail = member.getMemberEmail();
+        this.street = member.getMemberAddress().getStreet();
+        this.city = member.getMemberAddress().getCity();
+        this.zipcode = member.getMemberAddress().getZipcode();
     }
 }

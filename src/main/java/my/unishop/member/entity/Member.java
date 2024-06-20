@@ -19,11 +19,11 @@ public class Member extends BaseEntity {
 
     private String username;
     private String password;
-    private String tel;
-    private String email;
+    private String memberTel;
+    private String memberEmail;
 
     @Embedded
-    private Address address;
+    private Address memberAddress;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
@@ -31,16 +31,16 @@ public class Member extends BaseEntity {
     public Member(MemberRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.password = requestDto.getPassword();
-        this.tel = requestDto.getTel();
-        this.email = requestDto.getEmail();
-        this.address = new Address(requestDto.getCity(), requestDto.getStreet(), requestDto.getZipcode());
+        this.memberTel = requestDto.getMemberTel();
+        this.memberEmail = requestDto.getMemberEmail();
+        this.memberAddress = new Address(requestDto.getCity(), requestDto.getStreet(), requestDto.getZipcode());
         this.role = requestDto.getRole();
     }
 
     public void updateMember(MemberRequestDto memberRequestDto) {
         this.password = memberRequestDto.getPassword();
-        this.tel = memberRequestDto.getTel();
-        this.address = new Address(memberRequestDto.getCity(), memberRequestDto.getStreet(), memberRequestDto.getZipcode());
+        this.memberTel = memberRequestDto.getMemberTel();
+        this.memberAddress = new Address(memberRequestDto.getCity(), memberRequestDto.getStreet(), memberRequestDto.getZipcode());
     }
 }
 

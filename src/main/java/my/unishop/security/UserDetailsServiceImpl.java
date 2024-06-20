@@ -2,7 +2,7 @@ package my.unishop.security;
 
 import lombok.extern.slf4j.Slf4j;
 import my.unishop.member.entity.Member;
-import my.unishop.member.MemberRepository;
+import my.unishop.member.repository.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

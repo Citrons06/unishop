@@ -1,12 +1,12 @@
-package my.unishop.member;
+package my.unishop.member.repository;
 
 import my.unishop.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findByUsername(String username);
-    Member findByEmail(String email);
+    Member findByMemberEmail(String email);
 
     boolean existsByUsername(String username);
-    boolean existsByEmail(String email);
+    boolean existsByMemberEmail(String email);
 }
