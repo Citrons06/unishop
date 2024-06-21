@@ -12,6 +12,8 @@ import my.unishop.member.entity.Member;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
 
@@ -52,27 +54,39 @@ public class MemberService {
         log.info("verificationCode: " + verificationCode);
     }
 
-    //이메일 인증 및 사용자 정보 저장
     public MemberResponseDto verifyEmail(String email, String code) {
-        RegistrationAttempt attempt = (RegistrationAttempt) httpSession.getAttribute("registrationAttempt");
-        log.info("이메일 인증 시도: " + email + " / " + code);
-        log.info("세션 정보: " + attempt);
+        HttpSession session = getCurrentSession();
+        RegistrationAttempt attempt = (RegistrationAttempt) session.getAttribute("registrationAttempt");
 
-        if (attempt != null && attempt.getVerificationCode().equals(code)) {
+        if (attempt == null) {
+            log.error("세션 정보가 없습니다.");
+            throw new IllegalStateException("세션 정보가 없습니다.");
+        }
+
+        log.info("이메일 인증 시도: " + email + " / 입력 코드: " + code + " / 세션 코드: " + attempt.getVerificationCode());
+
+        if (attempt.getVerificationCode().equals(code)) {
             Member member = new Member(attempt.getMemberRequestDto());
 
             if (member.getMemberEmail().equals(email)) {
                 memberRepository.save(member);
-                httpSession.removeAttribute("registrationAttempt");
+                session.removeAttribute("registrationAttempt");
                 log.info("이메일 인증에 성공하였습니다. 사용자 정보가 저장되었습니다.");
-
                 return new MemberResponseDto(member);
             } else {
                 throw new IllegalArgumentException("잘못된 접근입니다.");
             }
         } else {
-            throw new IllegalStateException("세션 정보가 만료되었습니다.");
+            log.error("제공된 코드가 일치하지 않습니다: 제공된 코드=" + code + ", 세션 코드=" + attempt.getVerificationCode());
+            throw new IllegalStateException("인증 코드가 일치하지 않습니다.");
         }
+    }
+
+    private HttpSession getCurrentSession() {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        //getSession(false)를 사용하여 현재 요청에 이미 연결된 세션이 있는지만 확인
+        //세션이 없다면 null을 반환
+        return attr.getRequest().getSession(false);
     }
 
     //회원 정보 수정

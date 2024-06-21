@@ -1,4 +1,4 @@
-package my.unishop.jwt;
+package my.unishop.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import my.unishop.jwt.JwtUtil;
 import my.unishop.jwt.dto.AuthResponse;
 import my.unishop.jwt.dto.LoginRequestDto;
 import my.unishop.jwt.entity.RefreshToken;
@@ -19,9 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 
-/**
- * 로그인 요청 처리 및 액세스 토큰, 리프레시 토큰 생성
- */
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtil jwtUtil;

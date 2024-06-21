@@ -2,11 +2,13 @@ package my.unishop.member.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import my.unishop.member.entity.Member;
 import my.unishop.member.entity.UserRole;
 
 @Getter @Setter
+@NoArgsConstructor
 public class MemberRequestDto {
     private String username;
 

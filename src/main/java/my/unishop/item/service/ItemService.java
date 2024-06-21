@@ -35,7 +35,7 @@ public class ItemService {
         return ItemResponseDto.listFromItems(items);
     }
 
-    public Object getItem(Long itemid) {
+    public ItemResponseDto getItem(Long itemid) {
         Item item = itemRepository.findById(itemid)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. id=" + itemid));
         return new ItemResponseDto(item);

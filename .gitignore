@@ -22,6 +22,7 @@ bin/
 *.iws
 *.iml
 *.ipr
+*.env
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
@@ -37,6 +38,7 @@ out/
 .vscode/
 
 src/main/resources/application.yml
+src/test/resources/application-test.yml
 src/main/resources/docker-compose.yml
 data/
 env/

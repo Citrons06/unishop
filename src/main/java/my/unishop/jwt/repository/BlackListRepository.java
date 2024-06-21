@@ -7,4 +7,5 @@ import java.time.LocalDateTime;
 
 public interface BlackListRepository extends JpaRepository<BlackList, Long> {
     void deleteByCreatedDateBefore(LocalDateTime expiryDate);
+    boolean existsByInvalidRefreshToken(String token);
 }
