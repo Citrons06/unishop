@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,28 +7,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
 <body>
-<header class="bg-blue-600 p-4 text-white">
-    <div class="container mx-auto flex justify-between items-center">
-        <a href="/"><h1 class="text-xl">Uni</h1></a>
-        <nav>
-            <ul class="flex space-x-4">
-                <li><a href="/user/login-page" class="hover:text-blue-300">로그인</a></li>
-                <li><a href="/user/signup" class="hover:text-blue-300">회원가입</a></li>
-                <li><a href="/user/mypage" class="hover:text-blue-300">마이페이지</a></li>
-                <li><a href="/cart/cartlist" class="hover:text-blue-300">장바구니</a></li>
-            </ul>
-        </nav>
-    </div>
-    <div class="bg-blue-700">
-        <div class="container mx-auto py-2">
-            <ul class="flex space-x-4">
-                <li><a href="/items/itemlist?category=1" class="hover:text-blue-300">카테고리1</a></li>
-                <li><a href="/items/itemlist?category=2" class="hover:text-blue-300">카테고리2</a></li>
-                <li><a href="/items/itemlist?category=3" class="hover:text-blue-300">카테고리3</a></li>
-            </ul>
-        </div>
-    </div>
-</header>
+<div class="header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</div>
 
 <main class="container mx-auto mt-8">
     <div class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md">

@@ -1,47 +1,33 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>메인 페이지</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <title>Product Detail</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
 </head>
-<body>
-<header class="bg-blue-600 p-4 text-white">
-    <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-xl">Uni</h1>
-        <nav>
-            <ul class="flex space-x-4">
-                <li><a href="/user/login" class="hover:text-blue-300">로그인</a></li>
-                <li><a href="/user/signup" class="hover:text-blue-300">회원가입</a></li>
-                <li><a href="/user/mypage" class="hover:text-blue-300">마이페이지</a></li>
-                <li><a href="/cart/cartlist" class="hover:text-blue-300">장바구니</a></li>
-            </ul>
-        </nav>
-    </div>
-    <div class="bg-blue-700">
-        <div class="container mx-auto py-2">
-            <ul class="flex space-x-4">
-                <li><a href="/items/itemlist?category=1" class="hover:text-blue-300">카테고리1</a></li>
-                <li><a href="/items/itemlist?category=2" class="hover:text-blue-300">카테고리2</a></li>
-                <li><a href="/items/itemlist?category=3" class="hover:text-blue-300">카테고리3</a></li>
-            </ul>
-        </div>
-    </div>
-</header>
+<body class="bg-gray-100">
+<div class="header">
+    <div th:replace="~{fragments/header :: header}"></div>
+</div>
 
 <main class="container mx-auto mt-8">
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <div class="bg-white p-4 shadow rounded-lg">
-            <img src="https://via.placeholder.com/150" alt="상품1" class="w-full h-48 mb-4 rounded object-cover">
-            <h3 class="text-lg font-bold">상품1</h3>
-            <p class="text-gray-600 mb-2">상품 설명</p>
-            <div class="flex justify-between items-center">
-                <span class="text-xl font-bold">₩10000</span>
-                <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">장바구니</button>
+    <div class="bg-white p-8 rounded-lg shadow-lg" id="product-detail">
+        <div class="flex flex-col md:flex-row">
+            <img th:src="@{|/images/${item.id}.jpg|}" alt="상품 이미지" class="w-full md:w-1/2 h-64 object-cover mb-4 md:mb-0 md:mr-4 rounded">
+            <div class="flex flex-col justify-between">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2" th:text="${item.itemName}">상품 이름</h2>
+                    <p class="text-gray-700 mb-4" th:text="${item.description}">상품 설명</p>
+                    <p class="text-gray-700 mb-2">판매 상태: <span th:text="${item.itemSellStatus}">판매 상태</span></p>
+                    <p class="text-gray-700 mb-2">판매 수량: <span th:text="${item.item_sell_count}">판매 수량</span></p>
+                    <p class="text-gray-700 mb-4">재고 수량: <span th:text="${item.quantity}">재고 수량</span></p>
+                    <span class="text-2xl font-bold" th:text="'$' + ${item.price}">가격</span>
+                </div>
+                <button class="bg-blue-600 text-white px-4 py-2 mt-4 rounded hover:bg-blue-500" onclick="addToCart([[${item.id}]], '[[${item.itemName}]]', [[${item.price}]])">Add to Cart</button>
             </div>
         </div>
-        <!-- 반복해서 다른 상품들 추가 -->
     </div>
 </main>
 
@@ -49,5 +35,11 @@
     © 2024 Uni. All rights reserved.
 </footer>
 
+<script>
+    function addToCart(id, name, price) {
+        // Add to cart functionality
+        alert(`${name} has been added to the cart!`);
+    }
+</script>
 </body>
 </html>
