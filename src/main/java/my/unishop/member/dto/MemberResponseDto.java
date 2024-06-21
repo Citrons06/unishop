@@ -27,4 +27,10 @@ public class MemberResponseDto {
         this.city = member.getMemberAddress().getCity();
         this.zipcode = member.getMemberAddress().getZipcode();
     }
+
+    public MemberResponseDto(String mail, String test, String city) {
+        this.memberEmail = mail;
+        this.username = test;
+        this.city = city;
+    }
 }
