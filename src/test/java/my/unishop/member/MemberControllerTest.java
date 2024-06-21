@@ -47,7 +47,7 @@ class MemberControllerTest {
     @Autowired
     private MemberService memberService;
 
-    @Test///
+    @Test
     @DisplayName("회원가입 테스트")
     void signup() {
         MemberRequestDto memberRequestDto =
