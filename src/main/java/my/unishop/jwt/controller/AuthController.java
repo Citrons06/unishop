@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import my.unishop.jwt.dto.AuthResponse;
 import my.unishop.jwt.dto.LoginRequestDto;
 import my.unishop.jwt.service.AuthService;
-import my.unishop.jwt.service.TokenBlacklistService;
+import my.unishop.jwt.service.BlackListTokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +19,9 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
-    private final TokenBlacklistService tokenBlacklistService;
+    private final BlackListTokenService tokenBlacklistService;
 
-    @PostMapping("user/login-page")
+    @PostMapping("/user/login-page")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDto loginRequest) {
         try {
             AuthResponse authResponse = authService.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword());
@@ -29,17 +29,6 @@ public class AuthController {
         } catch (Exception e) {
             log.error("Authentication failed", e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
-        }
-    }
-
-    @PostMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken(@RequestParam String refreshToken) {
-        try {
-            AuthResponse authResponse = authService.refreshAccessToken(refreshToken);
-            return ResponseEntity.ok(authResponse);
-        } catch (IllegalArgumentException e) {
-            log.error("Refresh token is invalid or does not exist", e);
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 
@@ -55,6 +44,17 @@ public class AuthController {
         } catch (IllegalArgumentException e) {
             log.error("Invalid refresh token", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshAccessToken(@RequestParam String refreshToken) {
+        try {
+            AuthResponse authResponse = authService.refreshAccessToken(refreshToken);
+            return ResponseEntity.ok(authResponse);
+        } catch (IllegalArgumentException e) {
+            log.error("Refresh token is invalid or does not exist", e);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 }

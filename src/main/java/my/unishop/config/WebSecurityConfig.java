@@ -1,8 +1,8 @@
 package my.unishop.config;
 
 import lombok.RequiredArgsConstructor;
-import my.unishop.jwt.JwtAuthenticationFilter;
-import my.unishop.jwt.JwtAuthorizationFilter;
+import my.unishop.jwt.filter.JwtAuthenticationFilter;
+import my.unishop.jwt.filter.JwtAuthorizationFilter;
 import my.unishop.jwt.JwtUtil;
 import my.unishop.jwt.repository.RefreshTokenRepository;
 import my.unishop.security.UserDetailsServiceImpl;
