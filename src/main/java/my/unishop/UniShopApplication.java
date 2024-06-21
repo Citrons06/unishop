@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class UniShopApplication {
 
 	public static void main(String[] args) {
+		System.setProperty("spring.config.name","application-api,application-core");
 		SpringApplication.run(UniShopApplication.class, args);
 	}
 
