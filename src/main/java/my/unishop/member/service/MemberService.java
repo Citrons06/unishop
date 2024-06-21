@@ -89,7 +89,6 @@ public class MemberService {
         return attr.getRequest().getSession(false);
     }
 
-
     //회원 정보 수정
     public MemberResponseDto updateMember(String username, MemberRequestDto memberRequestDto) {
         Member member = memberRepository.findByUsername(username);

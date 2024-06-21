@@ -11,12 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TokenBlacklistService {
+public class BlackListTokenService {
 
     private final BlackListRepository blackListRepository;
 
     public void blacklistToken(String token) {
         log.info("블랙리스트에 추가 : " + token);
         blackListRepository.save(new BlackList(token));
+    }
+
+    public boolean isBlacklisted(String token) {
+        return blackListRepository.existsByInvalidRefreshToken(token);
     }
 }

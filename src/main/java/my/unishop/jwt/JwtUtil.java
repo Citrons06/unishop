@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import my.unishop.jwt.service.BlackListTokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +19,15 @@ public class JwtUtil {
 
     @Value("${jwt.secret.key}")
     private String secretKey;
-    private static final long ACCESS_TOKEN_EXPIRATION = 15 * 60 * 1000; // 15 minutes
+    private static final long ACCESS_TOKEN_EXPIRATION = 60 * 60 * 1000; // 60 minutes
     private static final long REFRESH_TOKEN_EXPIRATION = 7 * 24 * 60 * 60 * 1000; // 7 days
     private Key key;
+
+    private final BlackListTokenService blackListTokenService;
+
+    public JwtUtil(BlackListTokenService blackListTokenService) {
+        this.blackListTokenService = blackListTokenService;
+    }
 
     @PostConstruct
     public void init() {
@@ -47,6 +54,11 @@ public class JwtUtil {
     }
 
     public boolean validateToken(String token) {
+        if (blackListTokenService.isBlacklisted(token)) {
+            log.debug("Token is blacklisted: {}", token);
+            return false;
+        }
+
         try {
             log.debug("Validating token: {}", token);
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
