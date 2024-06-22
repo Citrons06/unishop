@@ -1,63 +1,45 @@
-name: Run Test
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ develop, feature/* ]
+    branches: [main, develop]
   pull_request:
-    branches: [ develop ]
+    branches: [develop]
 
 jobs:
-  build:
+  docker:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_DB: test
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: 1234
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'adopt'
-          java-version: '21'
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-        shell: bash
+        run: chmod +x gradlew
 
-      - name: Set up Node.js 20
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
+      - name: Build Docker image
+        run: docker build -t uni-shop:latest .
 
-      - name: Set environment variables
+      - name: Run tests
+        run: docker run --rm -v ${{ github.workspace }}:/app -w /app uni-shop-image:latest ./gradlew test
+
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Tag image
+        run: docker tag uni-shop:latest ${{ secrets.DOCKER_USERNAME }}/uni-shop-service
+
+      - name: Push image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/uni-shop-service
+
+      - name: Copy Docker Compose file
+        run: cp docker-compose.yml /home/gradle/project/build/libs/docker-compose.yml
+
+      - name: Deploy with Docker Compose
         run: |
-          echo "SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/test" >> $GITHUB_ENV
-          echo "SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver" >> $GITHUB_ENV
-          echo "SPRING_DATASOURCE_USERNAME=test" >> $GITHUB_ENV
-          echo "SPRING_DATASOURCE_PASSWORD=1234" >> $GITHUB_ENV
-          echo "SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop" >> $GITHUB_ENV
-
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          until pg_isready -h localhost -p 5432; do
-            echo "Waiting for PostgreSQL..."
-            sleep 5
-          done
-
-      - name: Build and Test
-        run: ./gradlew build test --info
+          cd /home/gradle/project/build/libs/
+          docker-compose down
+          docker-compose up -d

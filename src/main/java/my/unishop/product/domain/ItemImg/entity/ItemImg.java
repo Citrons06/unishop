@@ -1,9 +1,8 @@
-package my.unishop.order.entity;
+package my.unishop.product.domain.ItemImg.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import my.unishop.admin.BaseEntity;
 import my.unishop.product.domain.item.entity.Item;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -11,18 +10,17 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @NoArgsConstructor
-public class OrderItem extends BaseEntity {
+public class ItemImg {
 
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "order_item_id")
+    @Column(name = "item_img_id")
     private Long id;
 
-    private Integer orderPrice;
-    private Integer count;
+    private String imgName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    private String imgUrl;
+    private String oriImgName;
+    private String repImgYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")

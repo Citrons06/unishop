@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import my.unishop.admin.BaseEntity;
-import my.unishop.member.entity.Address;
-import my.unishop.member.entity.Member;
+import my.unishop.user.domain.member.entity.Address;
+import my.unishop.user.domain.member.entity.Member;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

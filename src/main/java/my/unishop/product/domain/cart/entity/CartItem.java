@@ -1,4 +1,4 @@
-package my.unishop.order.entity;
+package my.unishop.product.domain.cart.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,18 +11,14 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @NoArgsConstructor
-public class OrderItem extends BaseEntity {
+public class CartItem extends BaseEntity {
 
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "order_item_id")
+    @Column(name = "cart_item_id")
     private Long id;
 
-    private Integer orderPrice;
-    private Integer count;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    private Integer totalPrice;
+    private Integer itemCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
