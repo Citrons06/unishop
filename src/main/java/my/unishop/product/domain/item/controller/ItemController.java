@@ -21,7 +21,6 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
-    private final ItemAdminService itemAdminService;
     private final CategoryAdminService categoryAdminService;
 
     @GetMapping("/item/list")
@@ -33,15 +32,15 @@ public class ItemController {
         List<CategoryResponseDto> categories = categoryAdminService.getCategories();
         if (search != null && !search.isEmpty()) {
             if (categoryId != null) {
-                items = itemAdminService.searchItemsByCategoryAndItemName(categoryId, search);
+                items = itemService.searchItemsByCategoryAndItemName(categoryId, search);
             } else {
-                items = itemAdminService.searchItemsByName(search);
+                items = itemService.searchItemsByName(search);
             }
         } else {
             if (categoryId != null) {
-                items = itemAdminService.getItemsByCategory(categoryId);
+                items = itemService.getItemsByCategory(categoryId);
             } else {
-                items = itemAdminService.getItems();
+                items = itemService.getItems();
             }
         }
         model.addAttribute("items", items);
@@ -55,4 +54,5 @@ public class ItemController {
         model.addAttribute("item", item);
         return "items/itemDetail";
     }
+
 }

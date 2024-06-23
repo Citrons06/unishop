@@ -1,7 +1,6 @@
 package my.unishop.user.domain.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import my.unishop.global.jwt.dto.RegistrationAttempt;
 import my.unishop.user.domain.member.dto.MemberRequestDto;
 import my.unishop.user.domain.member.dto.MemberResponseDto;
 import my.unishop.user.domain.member.dto.VerifyMailRequest;
@@ -42,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class MemberControllerTest {
+class MemberApiControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -72,46 +71,6 @@ class MemberControllerTest {
         ResponseEntity<?> response = memberController.signup(memberRequestDto);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    @DisplayName("이메일 인증 테스트")
-    void verifyEmailWithValidCode() throws Exception {
-        // 세션 및 요청 설정
-        MockHttpSession session = new MockHttpSession();
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setSession(session);
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-
-        // 세션에 필요한 객체 저장
-        RegistrationAttempt attempt = new RegistrationAttempt();
-        String validCode = "valid_code";
-        attempt.setVerificationCode(validCode);
-
-        MemberRequestDto memberRequestDto = new MemberRequestDto();
-        memberRequestDto.setMemberEmail("abc@naver.com");
-        memberRequestDto.setPassword("password");
-        attempt.setMemberRequestDto(memberRequestDto);
-
-        session.setAttribute("registrationAttempt", attempt);
-
-        // 요청 본문 설정
-        VerifyMailRequest verifyMailRequest = new VerifyMailRequest("abc@naver.com", validCode);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(verifyMailRequest);
-
-        // 서비스 모의 설정
-        when(memberService.verifyEmail(any(String.class), any(String.class)))
-                .thenReturn(new MemberResponseDto("abc@naver.com", "test", "Seoul"));
-
-        // 요청 실행 및 검증
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/verify-email")
-                        .session(session) // 요청에 세션 포함
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8"))
-                .andExpect(jsonPath("$.memberEmail").value("abc@naver.com"));
     }
 
     @Test

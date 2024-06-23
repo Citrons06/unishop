@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import my.unishop.global.jwt.JwtUtil;
 import my.unishop.global.jwt.repository.RefreshTokenRepository;
 import my.unishop.global.jwt.dto.AuthResponse;
-import my.unishop.global.jwt.dto.LoginRequestDto;
+import my.unishop.user.domain.member.dto.LoginRequestDto;
 import my.unishop.global.jwt.entity.RefreshToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

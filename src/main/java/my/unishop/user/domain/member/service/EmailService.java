@@ -2,7 +2,6 @@ package my.unishop.user.domain.member.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,42 +14,27 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender javaMailSender;
-    private final HttpSession httpSession;
+    private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
-    private String sender;
+    private String fromEmail;
 
-    public void sendMail(String to, String verificationCode) {
-        if (!isEmail(to)) {
-            throw new IllegalArgumentException("유효하지 않은 이메일입니다.");
-        }
-
-        httpSession.setAttribute("emailVerificationCode", verificationCode);
-
-        MimeMessage message = javaMailSender.createMimeMessage();
+    public void sendMail(String to, String token) {
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            helper.setFrom(sender);
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom(fromEmail);
             helper.setTo(to);
-            helper.setSubject("회원가입 인증번호");
-            String body = "";
-            body += "<h3>" + "인증 번호" + "</h3>";
-            body += "<h1>" + verificationCode + "</h1>";
-            message.setText(body,"UTF-8", "html");
+            helper.setSubject("[Uni] 회원가입 인증 요청");
+            helper.setText("<p>아래 링크를 클릭하여 회원가입을 완료해 주세요.:</p>"
+                    + "<a href='http://localhost:8080/api/verify-email?token=" + token + "&email=" + to + "'>Confirm Email</a>", true);
 
-            javaMailSender.send(message);
+            mailSender.send(message);
+            log.info("Email sent to {}", to);
         } catch (MessagingException e) {
-            log.error("이메일 전송 실패", e);
-            throw new RuntimeException("이메일 전송에 실패했습니다.");
+            log.error("Failed to send email", e);
+            throw new RuntimeException(e);
         }
-    }
-
-    private boolean isEmail(String email) {
-        return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
-    }
-
-    public String generateVerificationCode() {
-        return String.valueOf((int) (Math.random() * 9000) + 1000);
     }
 }

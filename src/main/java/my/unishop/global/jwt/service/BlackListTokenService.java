@@ -21,6 +21,6 @@ public class BlackListTokenService {
     }
 
     public boolean isBlacklisted(String token) {
-        return blackListRepository.existsByInvalidRefreshToken(token);
+        return blackListRepository.existsByRefreshToken(token);
     }
 }

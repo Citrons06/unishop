@@ -82,5 +82,15 @@ public class JwtUtil {
         }
         return null;
     }
+
+    // JWT 기반 이메일 인증 코드 생성
+    public String generateEmailVerificationToken(String memberEmail) {
+        return Jwts.builder()
+                .setSubject(memberEmail)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 15 * 60 * 1000)) // 15 minutes
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
 }
 

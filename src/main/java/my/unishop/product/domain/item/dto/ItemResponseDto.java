@@ -31,6 +31,8 @@ public class ItemResponseDto {
 
     private Long categoryId;
 
+    private boolean hasImages;
+
     public ItemResponseDto(Item item) {
         this.id = item.getId();
         this.itemName = item.getItemName();
@@ -40,6 +42,7 @@ public class ItemResponseDto {
         this.itemSellStatus = item.getItemSellStatus();
         this.categoryId = item.getCategory().getId();
         this.itemImgList = item.getItemImgList();
+        this.hasImages = item.getItemImgList() != null && !item.getItemImgList().isEmpty();
     }
 
     public static List<ItemResponseDto> listFromItems(List<Item> items) {

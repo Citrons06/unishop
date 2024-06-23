@@ -1,4 +1,4 @@
-package my.unishop.global.jwt.service;
+package my.unishop.user.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import my.unishop.global.jwt.JwtUtil;

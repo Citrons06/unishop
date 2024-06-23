@@ -1,23 +1,21 @@
 package my.unishop.global.jwt.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import my.unishop.admin.BaseEntity;
+import my.unishop.admin.BaseRedisEntity;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
-@Getter @Setter
-@Entity
+@Getter
 @NoArgsConstructor
-public class RefreshToken extends BaseEntity {
+@RedisHash("refreshtoken")
+public class RefreshToken extends BaseRedisEntity {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
     private Long id;
 
+    @Indexed
     private String username;
 
     private String token;
@@ -25,5 +23,6 @@ public class RefreshToken extends BaseEntity {
     public RefreshToken(String username, String token) {
         this.username = username;
         this.token = token;
+        prePersist();
     }
 }

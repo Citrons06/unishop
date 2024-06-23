@@ -1,4 +1,4 @@
-package my.unishop.global.jwt.dto;
+package my.unishop.user.domain.member.dto;
 
 import lombok.Getter;
 import lombok.Setter;

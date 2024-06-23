@@ -1,11 +1,13 @@
 package my.unishop.global.jwt.repository;
 
 import my.unishop.global.jwt.entity.BlackList;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
-public interface BlackListRepository extends JpaRepository<BlackList, Long> {
+@Repository
+public interface BlackListRepository extends CrudRepository<BlackList, Long> {
     void deleteByCreatedDateBefore(LocalDateTime expiryDate);
-    boolean existsByInvalidRefreshToken(String token);
+    boolean existsByRefreshToken(String token);
 }

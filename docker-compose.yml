@@ -1,10 +1,18 @@
 services:
   db:
     image: postgres:latest
-    container_name: postgres
+    container_name: uni-shop-postgres
     env_file:
-      - ./env/postgres.env
+      - postgres.env
     ports:
       - 5432:5432
     volumes:
       - ./data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: uni-shop-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data

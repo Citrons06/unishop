@@ -1,28 +1,26 @@
 package my.unishop.global.jwt.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import my.unishop.admin.BaseEntity;
+import my.unishop.admin.BaseRedisEntity;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
-
-@AllArgsConstructor
-@NoArgsConstructor(access = PROTECTED)
 @Getter
-@Entity
-public class BlackList extends BaseEntity {
+@NoArgsConstructor
+@RedisHash("blacklist")
+public class BlackList extends BaseRedisEntity {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "invalid_refresh_token")
-    private String invalidRefreshToken;
+    @Indexed
+    private String refreshToken;
 
-    public BlackList(String invalidRefreshToken) {
-        this.invalidRefreshToken = invalidRefreshToken;
+    public BlackList(String refreshToken) {
+        this.refreshToken = refreshToken;
+        prePersist();
     }
 }

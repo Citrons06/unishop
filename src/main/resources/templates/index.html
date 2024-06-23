@@ -15,18 +15,7 @@
 <main class="container mx-auto mt-8">
     <div class="bg-white p-8 rounded-lg shadow-lg" id="product-detail">
         <div class="flex flex-col md:flex-row">
-            <img th:src="@{|/images/${item.id}.jpg|}" alt="상품 이미지" class="w-full md:w-1/2 h-64 object-cover mb-4 md:mb-0 md:mr-4 rounded">
             <div class="flex flex-col justify-between">
-                <div>
-                    <h2 class="text-3xl font-bold mb-2" th:text="${item.itemName}">상품 이름</h2>
-                    <p class="text-gray-700 mb-4" th:text="${item.description}">상품 설명</p>
-                    <p class="text-gray-700 mb-2">판매 상태: <span th:text="${item.itemSellStatus}">판매 상태</span></p>
-                    <p class="text-gray-700 mb-2">판매 수량: <span th:text="${item.item_sell_count}">판매 수량</span></p>
-                    <p class="text-gray-700 mb-4">재고 수량: <span th:text="${item.quantity}">재고 수량</span></p>
-                    <span class="text-2xl font-bold" th:text="'$' + ${item.price}">가격</span>
-                </div>
-                <button class="bg-blue-600 text-white px-4 py-2 mt-4 rounded hover:bg-blue-500" onclick="addToCart([[${item.id}]], '[[${item.itemName}]]', [[${item.price}]])">Add to Cart</button>
-            </div>
         </div>
     </div>
 </main>
@@ -34,12 +23,5 @@
 <footer class="bg-gray-200 text-center p-4 text-sm mt-8">
     © 2024 Uni. All rights reserved.
 </footer>
-
-<script>
-    function addToCart(id, name, price) {
-        // Add to cart functionality
-        alert(`${name} has been added to the cart!`);
-    }
-</script>
 </body>
 </html>
