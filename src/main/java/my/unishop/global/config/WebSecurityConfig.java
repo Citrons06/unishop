@@ -59,7 +59,7 @@ public class WebSecurityConfig {
 
         http.formLogin((formLogin) ->
                 formLogin
-                        .loginPage("/api/user/login-page").permitAll()
+                        .loginPage("/login-page").permitAll()
                         .defaultSuccessUrl("/", true)
         );
 

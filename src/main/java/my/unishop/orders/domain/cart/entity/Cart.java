@@ -3,23 +3,22 @@ package my.unishop.orders.domain.cart.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import my.unishop.admin.BaseEntity;
-import my.unishop.user.domain.member.entity.Member;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
+import java.io.Serializable;
+import java.util.Map;
 
 @Getter
-@Entity
 @NoArgsConstructor
-public class Cart extends BaseEntity {
+@RedisHash("cart")
+public class Cart implements Serializable {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
     @Column(name = "cart_id")
     private Long id;
 
     private Integer totalPrice;
-    private Integer itemCount;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Member user;
+    private Integer quantity;
+    private Map<String, Integer> item;  // key: itemId, value: quantity
 }

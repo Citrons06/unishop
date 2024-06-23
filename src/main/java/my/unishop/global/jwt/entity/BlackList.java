@@ -1,6 +1,5 @@
 package my.unishop.global.jwt.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import my.unishop.admin.BaseRedisEntity;

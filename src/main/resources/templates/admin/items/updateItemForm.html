@@ -9,7 +9,7 @@
 </head>
 <body class="bg-gray-100">
 <div class="header">
-    <div th:replace="~{fragments/header :: header}"></div>
+    <div th:replace="~{fragments/header :: header(username=${username}, categories=${categories})}"></div>
 </div>
 
 <main class="container mx-auto mt-8">

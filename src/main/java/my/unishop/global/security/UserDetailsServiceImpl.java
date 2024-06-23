@@ -20,6 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("사용자 인증 시도: {}", username);
         Member user = userRepository.findByUsername(username);
         if (user == null) {
             log.info("사용자를 찾을 수 없습니다. : " + username);

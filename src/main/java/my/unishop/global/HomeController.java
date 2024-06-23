@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -16,9 +17,10 @@ public class HomeController {
     private final CategoryAdminService categoryAdminService;
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, Principal principal) {
         List<CategoryResponseDto> categories = categoryAdminService.getCategories();
         model.addAttribute("categories", categories);
+        model.addAttribute("username", principal != null ? principal.getName() : null);
         return "index";
     }
 }
