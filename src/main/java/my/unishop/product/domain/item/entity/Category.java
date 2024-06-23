@@ -1,4 +1,4 @@
-package my.unishop.product.domain.category.entity;
+package my.unishop.product.domain.item.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -6,7 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import my.unishop.product.domain.item.entity.Item;
+import my.unishop.product.domain.item.dto.CategoryRequestDto;
+import my.unishop.product.domain.item.dto.CategoryResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,4 +26,12 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     private List<Item> items = new ArrayList<>();
+
+    public Category(CategoryRequestDto categoryRequestDto) {
+        this.categoryName = categoryRequestDto.getCategoryName();
+    }
+
+    public void update(CategoryResponseDto categoryResponseDto) {
+        this.categoryName = categoryResponseDto.getCategoryName();
+    }
 }

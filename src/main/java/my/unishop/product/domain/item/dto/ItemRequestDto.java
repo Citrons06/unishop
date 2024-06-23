@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import my.unishop.product.domain.item.entity.ItemSellStatus;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -26,11 +30,7 @@ public class ItemRequestDto {
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
 
-    public ItemRequestDto(String itemName, Integer price, Integer quantity, Integer item_sell_count, ItemSellStatus itemSellStatus) {
-        this.itemName = itemName;
-        this.price = price;
-        this.quantity = quantity;
-        this.item_sell_count = item_sell_count;
-        this.itemSellStatus = itemSellStatus;
-    }
+    private List<MultipartFile> itemImgFileList = new ArrayList<>();
+
+    private Long categoryId;
 }

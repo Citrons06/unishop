@@ -1,4 +1,4 @@
-package my.unishop.order.entity;
+package my.unishop.orders.domain.order.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

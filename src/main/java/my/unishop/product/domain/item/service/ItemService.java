@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.unishop.product.domain.item.entity.Item;
 import my.unishop.product.domain.item.repository.ItemRepository;
-import my.unishop.product.domain.item.dto.ItemRequestDto;
 import my.unishop.product.domain.item.dto.ItemResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,15 +18,6 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
-    //상품 등록
-    public ItemResponseDto createItem(ItemRequestDto itemRequestDto) {
-        Item item = new Item(itemRequestDto);
-        itemRepository.save(item);
-        log.info("상품 등록: " + item.getItemName());
-
-        return new ItemResponseDto(item);
-    }
-
     //상품 리스트 조회
     @Transactional(readOnly = true)
     public List<ItemResponseDto> getItems() {
@@ -35,9 +25,8 @@ public class ItemService {
         return ItemResponseDto.listFromItems(items);
     }
 
-    public ItemResponseDto getItem(Long itemid) {
-        Item item = itemRepository.findById(itemid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. id=" + itemid));
+    public ItemResponseDto getItem(Long itemId) {
+        Item item = itemRepository.findItemAndItemImgById(itemId);
         return new ItemResponseDto(item);
     }
 }

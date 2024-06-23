@@ -3,10 +3,7 @@ package my.unishop.product.domain.item.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import my.unishop.product.domain.ItemImg.entity.ItemImg;
 import my.unishop.admin.BaseEntity;
-import my.unishop.product.domain.cart.entity.CartItem;
-import my.unishop.product.domain.category.entity.Category;
 import my.unishop.product.domain.item.dto.ItemRequestDto;
 
 import java.util.ArrayList;
@@ -34,20 +31,31 @@ public class Item extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
-    private List<CartItem> cartItems = new ArrayList<>();
-
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
-    private List<ItemImg> itemImgs = new ArrayList<>();
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ItemImg> itemImgList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public Item(ItemRequestDto itemRequestDto) {
+    public Item(ItemRequestDto itemRequestDto, Category category) {
         this.itemName = itemRequestDto.getItemName();
         this.price = itemRequestDto.getPrice();
         this.quantity = itemRequestDto.getQuantity();
         this.itemSellStatus = itemRequestDto.getItemSellStatus();
+        this.category = category;
+    }
+
+    public void updateItem(ItemRequestDto itemRequestDto, Category category) {
+        this.itemName = itemRequestDto.getItemName();
+        this.price = itemRequestDto.getPrice();
+        this.quantity = itemRequestDto.getQuantity();
+        this.itemSellStatus = itemRequestDto.getItemSellStatus();
+        this.category = category;
+    }
+
+    public void updateItemImgs(List<ItemImg> newItemImgs) {
+        this.itemImgList.clear();
+        this.itemImgList.addAll(newItemImgs);
     }
 }
