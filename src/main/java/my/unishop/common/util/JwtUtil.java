@@ -71,8 +71,18 @@ public class JwtUtil {
         }
     }
 
+    public Claims getUserInfoFromToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
+
     public String getUsernameFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+        try {
+            Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+            return claims.getSubject();
+        } catch (JwtException e) {
+            log.error("Error parsing token", e);
+            return null;
+        }
     }
 
     public String resolveToken(HttpServletRequest req) {
@@ -91,6 +101,10 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + 15 * 60 * 1000)) // 15 minutes
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    public Claims getClaimsFromToken(String refreshToken) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(refreshToken).getBody();
     }
 }
 

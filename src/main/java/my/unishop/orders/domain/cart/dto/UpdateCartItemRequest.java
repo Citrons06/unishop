@@ -1,15 +1,12 @@
-package my.unishop.orders.domain.cart.entity;
+package my.unishop.orders.domain.cart.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class CartItem {
-
-    private Long id;
+public class UpdateCartItemRequest {
+    private Long itemId;
     private String itemName;
     private Integer price;
     private Integer quantity;

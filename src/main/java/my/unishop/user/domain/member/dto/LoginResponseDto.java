@@ -2,15 +2,16 @@ package my.unishop.user.domain.member.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import my.unishop.common.jwt.dto.TokenDto;
 
 @Getter @Setter
 public class LoginResponseDto {
     private String username;
-    private TokenDto tokenDto;
+    private String refreshToken;
+    private String accessToken;
 
-    public LoginResponseDto(String username, TokenDto tokenDto) {
+    public LoginResponseDto(String username, String refreshToken, String accessToken) {
         this.username = username;
-        this.tokenDto = tokenDto;
+        this.refreshToken = refreshToken;
+        this.accessToken = accessToken;
     }
 }

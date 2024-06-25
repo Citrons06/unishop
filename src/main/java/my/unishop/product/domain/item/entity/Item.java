@@ -3,6 +3,7 @@ package my.unishop.product.domain.item.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import my.unishop.admin.BaseEntity;
 import my.unishop.product.domain.item.dto.ItemRequestDto;
 
@@ -24,6 +25,7 @@ public class Item extends BaseEntity {
 
     private Integer price;
 
+    @Setter
     private Integer quantity;
 
     private Integer item_sell_count;

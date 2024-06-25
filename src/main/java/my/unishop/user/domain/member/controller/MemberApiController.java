@@ -1,9 +1,11 @@
 package my.unishop.user.domain.member.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.unishop.common.dto.AuthResponse;
 import my.unishop.user.domain.member.dto.LoginRequestDto;
+import my.unishop.user.domain.member.dto.LoginResponseDto;
 import my.unishop.user.domain.member.service.AuthService;
 import my.unishop.common.jwt.service.BlackListTokenService;
 import my.unishop.user.domain.member.dto.MemberRequestDto;
@@ -55,10 +57,10 @@ public class MemberApiController {
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDto loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequest, HttpServletResponse response) {
         try {
-            AuthResponse authResponse = authService.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword());
-            return ResponseEntity.ok(authResponse);
+            LoginResponseDto loginResponseDto = authService.login(loginRequest, response);
+            return ResponseEntity.ok(loginResponseDto);
         } catch (Exception e) {
             log.error("Authentication failed", e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");

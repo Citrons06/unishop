@@ -12,4 +12,8 @@ public class AuthResponse {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
+
+    public AuthResponse(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }
