@@ -1,13 +1,10 @@
 package my.unishop.user.domain.member.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import my.unishop.global.jwt.JwtUtil;
-import my.unishop.global.jwt.dto.AuthResponse;
-import my.unishop.global.jwt.service.BlackListTokenService;
+import my.unishop.common.util.JwtUtil;
+import my.unishop.common.dto.AuthResponse;
+import my.unishop.common.jwt.service.BlackListTokenService;
 import my.unishop.user.domain.member.dto.LoginRequestDto;
 import my.unishop.user.domain.member.dto.MemberRequestDto;
 import my.unishop.user.domain.member.service.AuthService;
@@ -68,18 +65,6 @@ public class MemberController {
             return "redirect:/user/signup?error";
         }
     }
-
-    @PostMapping("/login-page")
-    public ResponseEntity<AuthResponse> authenticateUser(@RequestBody LoginRequestDto loginRequestDto) {
-        try {
-            AuthResponse authResponse = authService.authenticateUser(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-            return ResponseEntity.ok(authResponse);
-        } catch (Exception e) {
-            log.error("Authentication failed", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
-
 
     // 로그아웃
     @PostMapping("/logout")

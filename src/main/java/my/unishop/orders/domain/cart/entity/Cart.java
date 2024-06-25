@@ -20,5 +20,12 @@ public class Cart implements Serializable {
 
     private Integer totalPrice;
     private Integer quantity;
-    private Map<String, Integer> item;  // key: itemId, value: quantity
+    private Map<String, Integer> item;
+
+    public Cart(Long id, Integer totalPrice, Integer quantity, Map<String, Integer> item) {
+        this.id = id;
+        this.totalPrice = totalPrice;
+        this.quantity = quantity;
+        this.item = item;
+    }
 }

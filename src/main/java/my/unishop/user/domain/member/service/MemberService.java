@@ -6,7 +6,7 @@ import my.unishop.user.domain.member.dto.MemberRequestDto;
 import my.unishop.user.domain.member.dto.MemberResponseDto;
 import my.unishop.user.domain.member.entity.Member;
 import my.unishop.user.domain.member.repository.MemberRepository;
-import my.unishop.global.jwt.JwtUtil;
+import my.unishop.common.util.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

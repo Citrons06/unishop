@@ -2,13 +2,12 @@ package my.unishop.user.domain.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import my.unishop.global.jwt.dto.AuthResponse;
+import my.unishop.common.dto.AuthResponse;
 import my.unishop.user.domain.member.dto.LoginRequestDto;
 import my.unishop.user.domain.member.service.AuthService;
-import my.unishop.global.jwt.service.BlackListTokenService;
+import my.unishop.common.jwt.service.BlackListTokenService;
 import my.unishop.user.domain.member.dto.MemberRequestDto;
 import my.unishop.user.domain.member.dto.MemberResponseDto;
-import my.unishop.user.domain.member.dto.VerifyMailRequest;
 import my.unishop.user.domain.member.service.MemberService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -55,10 +54,10 @@ public class MemberApiController {
         }
     }
 
-    @PostMapping("/user/login-page")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDto loginRequestDto) {
+    @PostMapping("/user/login")
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDto loginRequest) {
         try {
-            AuthResponse authResponse = authService.authenticateUser(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+            AuthResponse authResponse = authService.authenticateUser(loginRequest.getUsername(), loginRequest.getPassword());
             return ResponseEntity.ok(authResponse);
         } catch (Exception e) {
             log.error("Authentication failed", e);

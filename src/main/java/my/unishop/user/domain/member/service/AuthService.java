@@ -2,10 +2,10 @@ package my.unishop.user.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import my.unishop.global.jwt.JwtUtil;
-import my.unishop.global.jwt.repository.RefreshTokenRepository;
-import my.unishop.global.jwt.dto.AuthResponse;
-import my.unishop.global.jwt.entity.RefreshToken;
+import my.unishop.common.util.JwtUtil;
+import my.unishop.common.jwt.repository.RefreshTokenRepository;
+import my.unishop.common.dto.AuthResponse;
+import my.unishop.common.entity.RefreshToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +25,6 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public AuthResponse authenticateUser(String username, String password) {
-        log.info("사용자 인증 시도: {}", username);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );

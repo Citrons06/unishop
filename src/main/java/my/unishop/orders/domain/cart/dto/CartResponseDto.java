@@ -9,7 +9,7 @@ import my.unishop.orders.domain.cart.entity.Cart;
 @NoArgsConstructor
 public class CartResponseDto {
 
-    private Long id;
+    /*private Long id;
     private Integer totalPrice;
     private Integer itemCount;
 
@@ -17,5 +17,5 @@ public class CartResponseDto {
         this.id = cart.getId();
         this.totalPrice = cart.getTotalPrice();
         this.itemCount = cart.getItemCount();
-    }
+    }*/
 }
