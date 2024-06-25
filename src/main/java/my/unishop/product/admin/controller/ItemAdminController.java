@@ -8,6 +8,8 @@ import my.unishop.product.admin.service.CategoryAdminService;
 import my.unishop.product.admin.service.ItemAdminService;
 import my.unishop.product.domain.item.dto.ItemRequestDto;
 import my.unishop.product.domain.item.dto.ItemResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,21 +45,25 @@ public class ItemAdminController {
     @GetMapping("/item/list")
     public String itemList(@RequestParam(value = "search", required = false) String search,
                            @RequestParam(value = "category", required = false) Long categoryId,
+                           @RequestParam(value = "page", defaultValue = "0") int page,
+                           @RequestParam(value = "size", defaultValue = "8") int size,
                            Model model) {
 
-        List<ItemResponseDto> items;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<ItemResponseDto> items;
         List<CategoryResponseDto> categories = categoryAdminService.getCategories();
+
         if (search != null && !search.isEmpty()) {
             if (categoryId != null) {
-                items = itemAdminService.searchItemsByCategoryAndItemName(categoryId, search);
+                items = itemAdminService.searchItemsByCategoryAndItemName(categoryId, search, pageRequest);
             } else {
-                items = itemAdminService.searchItemsByName(search);
+                items = itemAdminService.searchItemsByName(search, pageRequest);
             }
         } else {
             if (categoryId != null) {
-                items = itemAdminService.getItemsByCategory(categoryId);
+                items = itemAdminService.getItemsByCategory(categoryId, pageRequest);
             } else {
-                items = itemAdminService.getItems();
+                items = itemAdminService.getItems(pageRequest);
             }
         }
         model.addAttribute("items", items);
@@ -65,19 +71,15 @@ public class ItemAdminController {
         return "admin/items/itemList";
     }
 
-
     @PostMapping("/item/create")
     public String createItem(@Valid @ModelAttribute("item") ItemRequestDto itemRequestDto,
                              List<MultipartFile> itemImgFileList) {
-
         try {
             itemRequestDto.setItemImgFileList(itemImgFileList);
             itemAdminService.createItem(itemRequestDto);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         return "redirect:/admin/item/list";
     }
 
@@ -86,13 +88,11 @@ public class ItemAdminController {
                              @Valid @ModelAttribute("item") ItemRequestDto itemRequestDto,
                              List<MultipartFile> itemImgFileList,
                              Long categoryId) {
-
         try {
             itemAdminService.updateItem(itemId, itemRequestDto, itemImgFileList, categoryId);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         return "redirect:/admin/item/list";
     }
 

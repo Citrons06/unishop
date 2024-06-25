@@ -5,11 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import my.unishop.product.domain.item.entity.Item;
 import my.unishop.product.domain.item.repository.ItemRepository;
 import my.unishop.product.domain.item.dto.ItemResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -19,28 +18,28 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
-    public List<ItemResponseDto> getItems() {
-        List<Item> items = itemRepository.findAllWithImagesAndCategory();
-        return items.stream().map(ItemResponseDto::new).collect(Collectors.toList());
+    public Page<ItemResponseDto> getItems(PageRequest pageRequest) {
+        Page<Item> items = itemRepository.findAll(pageRequest);
+        return items.map(ItemResponseDto::new);
     }
 
-    public List<ItemResponseDto> searchItemsByName(String name) {
-        List<Item> items = itemRepository.findByItemNameContaining(name);
-        return items.stream().map(ItemResponseDto::new).collect(Collectors.toList());
+    public Page<ItemResponseDto> searchItemsByName(String itemName, PageRequest pageRequest) {
+        Page<Item> items = itemRepository.findByItemNameContaining(itemName, pageRequest);
+        return items.map(ItemResponseDto::new);
     }
 
-    public List<ItemResponseDto> getItemsByCategory(Long categoryId) {
-        List<Item> items = itemRepository.findByCategoryId(categoryId);
-        return items.stream().map(ItemResponseDto::new).collect(Collectors.toList());
+    public Page<ItemResponseDto> getItemsByCategory(Long categoryId, PageRequest pageRequest) {
+        Page<Item> items = itemRepository.findByCategoryId(categoryId, pageRequest);
+        return items.map(ItemResponseDto::new);
     }
 
-    public List<ItemResponseDto> searchItemsByCategoryAndItemName(Long categoryId, String name) {
-        List<Item> items = itemRepository.findByCategoryIdAndItemNameContaining(categoryId, name);
-        return items.stream().map(ItemResponseDto::new).collect(Collectors.toList());
+    public Page<ItemResponseDto> searchItemsByCategoryAndItemName(Long categoryId, String itemName, PageRequest pageRequest) {
+        Page<Item> items = itemRepository.findByCategoryIdAndItemNameContaining(categoryId, itemName, pageRequest);
+        return items.map(ItemResponseDto::new);
     }
 
     public ItemResponseDto getItem(Long id) {
-        Item item = itemRepository.findItemAndItemImgById(id);
+        Item item = itemRepository.findItemById(id);
         return new ItemResponseDto(item);
     }
 }

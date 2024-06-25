@@ -11,6 +11,8 @@ import my.unishop.product.domain.item.dto.ItemResponseDto;
 import my.unishop.product.domain.item.entity.Item;
 import my.unishop.product.domain.item.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -99,24 +101,26 @@ public class ItemAdminService {
     }
 
     @Transactional(readOnly = true)
-    public List<ItemResponseDto> getItems() {
-        List<Item> items = itemRepository.findAllWithImagesAndCategory();
-        return ItemResponseDto.listFromItems(items);
+    public Page<ItemResponseDto> getItems(PageRequest pageRequest) {
+        Page<Item> items = itemRepository.findAllWithImagesAndCategory(pageRequest);
+        return items.map(ItemResponseDto::new);
     }
 
     @Transactional(readOnly = true)
-    public List<ItemResponseDto> searchItemsByName(String itemName) {
-        List<Item> items = itemRepository.findByItemNameContaining(itemName);
-        return items.stream().map(ItemResponseDto::new).collect(Collectors.toList());
+    public Page<ItemResponseDto> searchItemsByName(String itemName, PageRequest pageRequest) {
+        Page<Item> items = itemRepository.findByItemNameContaining(itemName, pageRequest);
+        return items.map(ItemResponseDto::new);
     }
 
-    public List<ItemResponseDto> searchItemsByCategoryAndItemName(Long categoryId, String itemName) {
-        List<Item> items = itemRepository.findByCategoryIdAndItemNameContaining(categoryId, itemName);
-        return items.stream().map(ItemResponseDto::new).collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<ItemResponseDto> getItemsByCategory(Long categoryId, PageRequest pageRequest) {
+        Page<Item> items = itemRepository.findByCategoryId(categoryId, pageRequest);
+        return items.map(ItemResponseDto::new);
     }
 
-    public List<ItemResponseDto> getItemsByCategory(Long categoryId) {
-        List<Item> items = itemRepository.findByCategoryId(categoryId);
-        return items.stream().map(ItemResponseDto::new).collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<ItemResponseDto> searchItemsByCategoryAndItemName(Long categoryId, String itemName, PageRequest pageRequest) {
+        Page<Item> items = itemRepository.findByCategoryIdAndItemNameContaining(categoryId, itemName, pageRequest);
+        return items.map(ItemResponseDto::new);
     }
 }

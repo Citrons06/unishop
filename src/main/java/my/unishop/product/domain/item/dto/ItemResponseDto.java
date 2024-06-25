@@ -4,45 +4,35 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
-import my.unishop.product.domain.item.entity.ItemImg;
 import my.unishop.product.domain.item.entity.Item;
 import my.unishop.product.domain.item.entity.ItemSellStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter @Setter
 public class ItemResponseDto {
 
     private Long id;
-
     private String itemName;
-
-    private Integer price;
-
-    private Integer quantity;
-
-    private Integer item_sell_count;
-
-    private List<ItemImg> itemImgList = new ArrayList<>();
+    private int price;
+    private int quantity;
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
 
-    private Long categoryId;
-
-    private boolean hasImages;
+    private List<ItemImgResponseDto> itemImgList = new ArrayList<>();
 
     public ItemResponseDto(Item item) {
         this.id = item.getId();
         this.itemName = item.getItemName();
         this.price = item.getPrice();
-        this.quantity = item.getQuantity();
-        this.item_sell_count = item.getItem_sell_count();
+        this.quantity = (item.getQuantity() != null) ? item.getQuantity() : 0;
         this.itemSellStatus = item.getItemSellStatus();
-        this.categoryId = item.getCategory().getId();
-        this.itemImgList = item.getItemImgList();
-        this.hasImages = item.getItemImgList() != null && !item.getItemImgList().isEmpty();
+        this.itemImgList = item.getItemImgList().stream()
+                .map(ItemImgResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     public static List<ItemResponseDto> listFromItems(List<Item> items) {
