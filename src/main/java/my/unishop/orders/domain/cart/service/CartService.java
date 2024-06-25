@@ -101,6 +101,7 @@ public class CartService {
                 if (updateCartItemRequest.getQuantity() > existingItem.getQuantity()) {
                     throw new IllegalArgumentException("재고 수량보다 많은 수량을 담을 수 없습니다.");
                 }
+
                 existingItem.setQuantity(updateCartItemRequest.getQuantity());
                 redisUtils.put(username, cart);
             }

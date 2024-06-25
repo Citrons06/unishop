@@ -1,5 +1,6 @@
 package my.unishop.user.domain.member.repository;
 
+import my.unishop.user.domain.member.dto.MemberOrderResponseDto;
 import my.unishop.user.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 

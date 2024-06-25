@@ -10,7 +10,7 @@ import my.unishop.user.domain.member.service.AuthService;
 import my.unishop.common.jwt.service.BlackListTokenService;
 import my.unishop.user.domain.member.dto.MemberRequestDto;
 import my.unishop.user.domain.member.dto.MemberResponseDto;
-import my.unishop.user.domain.member.service.MemberService;
+import my.unishop.user.domain.member.service.MemberServiceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @RequiredArgsConstructor
 public class MemberApiController {
 
-    private final MemberService memberService;
+    private final MemberServiceImpl memberService;
     private final AuthService authService;
     private final BlackListTokenService tokenBlacklistService;
 

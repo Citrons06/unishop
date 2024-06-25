@@ -2,7 +2,7 @@ package my.unishop.product.domain.item.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import my.unishop.product.domain.item.service.ItemService;
+import my.unishop.product.domain.item.service.ItemServiceImpl;
 import my.unishop.product.domain.item.dto.ItemResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ItemApiController {
 
-    private final ItemService itemService;
+    private final ItemServiceImpl itemService;
 
     @GetMapping("/item/list")
     public ResponseEntity<?> getItems(@RequestParam(value = "page", defaultValue = "0") int page,

@@ -3,7 +3,6 @@ package my.unishop.product.domain.item.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import my.unishop.admin.BaseEntity;
 import my.unishop.product.domain.item.dto.ItemRequestDto;
 
@@ -11,13 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static my.unishop.product.domain.item.entity.ItemSellStatus.SOLD_OUT;
 
 @Getter
 @Entity
 @NoArgsConstructor
 public class Item extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "item_id")
     private Long id;
 
@@ -25,7 +26,6 @@ public class Item extends BaseEntity {
 
     private Integer price;
 
-    @Setter
     private Integer quantity;
 
     private Integer item_sell_count;
@@ -59,5 +59,20 @@ public class Item extends BaseEntity {
     public void updateItemImgs(List<ItemImg> newItemImgs) {
         this.itemImgList.clear();
         this.itemImgList.addAll(newItemImgs);
+    }
+
+    public void decreaseStock(int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("재고 수량이 부족합니다.");
+        }
+        this.quantity -= quantity;
+
+        if (this.quantity == 0) {
+            this.itemSellStatus = SOLD_OUT;
+        }
+    }
+
+    public void increaseStock(int quantity) {
+        this.quantity += quantity;
     }
 }

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import my.unishop.product.admin.service.CategoryAdminService;
 import my.unishop.product.domain.item.dto.CategoryResponseDto;
 import my.unishop.product.domain.item.dto.ItemResponseDto;
-import my.unishop.product.domain.item.service.ItemService;
+import my.unishop.product.domain.item.service.ItemServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemController {
 
-    private final ItemService itemService;
+    private final ItemServiceImpl itemService;
     private final CategoryAdminService categoryAdminService;
 
     @GetMapping("/item/list")

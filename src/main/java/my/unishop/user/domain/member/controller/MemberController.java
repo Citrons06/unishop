@@ -3,14 +3,10 @@ package my.unishop.user.domain.member.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.unishop.common.util.JwtUtil;
-import my.unishop.common.dto.AuthResponse;
 import my.unishop.common.jwt.service.BlackListTokenService;
-import my.unishop.user.domain.member.dto.LoginRequestDto;
 import my.unishop.user.domain.member.dto.MemberRequestDto;
 import my.unishop.user.domain.member.service.AuthService;
-import my.unishop.user.domain.member.service.MemberService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import my.unishop.user.domain.member.service.MemberServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +22,7 @@ import java.util.Map;
 public class MemberController {
 
     private final AuthService authService;
-    private final MemberService memberService;
+    private final MemberServiceImpl memberService;
     private final BlackListTokenService blackListTokenService;
     private final JwtUtil jwtUtil;
 
