@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import my.unishop.common.jwt.service.BlackListTokenService;
@@ -71,10 +72,6 @@ public class JwtUtil {
         }
     }
 
-    public Claims getUserInfoFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-    }
-
     public String getUsernameFromToken(String token) {
         try {
             Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
@@ -90,8 +87,22 @@ public class JwtUtil {
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
+
+        // 쿠키에서 토큰을 찾는 로직 추가
+        if (bearerToken == null) {
+            Cookie[] cookies = req.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("AccessToken".equals(cookie.getName())) {
+                        return cookie.getValue();
+                    }
+                }
+            }
+        }
+
         return null;
     }
+
 
     // JWT 기반 이메일 인증 코드 생성
     public String generateEmailVerificationToken(String memberEmail) {

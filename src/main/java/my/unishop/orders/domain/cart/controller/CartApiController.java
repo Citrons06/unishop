@@ -21,6 +21,7 @@ public class CartApiController {
     private final CartService cartService;
     private final JwtUtil jwtUtil;
 
+    // 장바구니 조회
     @GetMapping("/cart")
     public ResponseEntity<Cart> getCart(HttpServletRequest request) {
         // 헤더의 토큰에서 username 추출
@@ -29,6 +30,7 @@ public class CartApiController {
         return ResponseEntity.ok(cart);
     }
 
+    // 장바구니에 상품 추가
     @PostMapping("/cart/add")
     public ResponseEntity<Cart> addItemToCart(HttpServletRequest request, @RequestBody AddItemCartRequest addItemCartRequest) {
         String username = getUsernameFromToken(request);
@@ -36,6 +38,7 @@ public class CartApiController {
         return ResponseEntity.ok(cart);
     }
 
+    // 장바구니에서 특정 상품 삭제
     @DeleteMapping("/cart/remove/{itemId}")
     public ResponseEntity<Cart> removeItemFromCart(HttpServletRequest request, @PathVariable Long itemId) {
         String username = getUsernameFromToken(request);
@@ -43,6 +46,7 @@ public class CartApiController {
         return ResponseEntity.ok(cart);
     }
 
+    // 장바구니 비우기
     @DeleteMapping("/cart/clear")
     public ResponseEntity<?> clearCart(HttpServletRequest request) {
         String username = getUsernameFromToken(request);
@@ -50,6 +54,7 @@ public class CartApiController {
         return ResponseEntity.ok("모든 상품이 장바구니에서 삭제되었습니다.");
     }
 
+    // 장바구니에 담긴 상품의 수량 업데이트
     @PutMapping("/cart/update/{itemId}")
     public ResponseEntity<Cart> updateItemQuantity(HttpServletRequest request,
                                                    @PathVariable Long itemId,

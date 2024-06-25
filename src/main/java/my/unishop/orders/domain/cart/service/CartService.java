@@ -52,11 +52,11 @@ public class CartService {
                 .findFirst();
 
         if (itemOptional.isPresent()) {
-            // 같은 상품이 이미 존재하는 경우, 수량을 업데이트
+            // 같은 상품이 이미 존재하는 경우 수량을 업데이트
             CartItem existingItem = itemOptional.get();
             existingItem.setQuantity(existingItem.getQuantity() + addItemCartRequest.getQuantity());
         } else {
-            // 같은 상품이 없는 경우, 새로운 상품을 장바구니에 추가
+            // 같은 상품이 없는 경우 새로운 상품을 장바구니에 추가
             CartItem newItem = new CartItem();
             newItem.setId(addItemCartRequest.getItemId());
             newItem.setItemName(addItemCartRequest.getItemName());

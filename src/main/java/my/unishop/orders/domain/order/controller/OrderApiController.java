@@ -8,7 +8,10 @@ import my.unishop.orders.domain.order.dto.OrderRequestDto;
 import my.unishop.orders.domain.order.dto.OrderResponseDto;
 import my.unishop.orders.domain.order.service.OrderService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -18,6 +21,24 @@ public class OrderApiController {
 
     private final OrderService orderService;
     private final JwtUtil jwtUtil;
+
+    // 주문 전체 내역 조회
+    @GetMapping("/order/list")
+    public ResponseEntity<?> orderList(HttpServletRequest request,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size) {
+        String username = getUsernameFromToken(request);
+        List<OrderResponseDto> orders = orderService.getOrderList(username, page, size);
+        return ResponseEntity.ok(orders);
+    }
+
+    // 주문 단건 상세 조회
+    @GetMapping("/order/detail/{orderId}")
+    public ResponseEntity<?> orderDetail(@PathVariable Long orderId) {
+        OrderResponseDto order = orderService.getOrderById(orderId);
+        return ResponseEntity.ok(order);
+    }
+
 
     @PostMapping("/order")
     public ResponseEntity<OrderResponseDto> createOrder(HttpServletRequest request, @RequestBody OrderRequestDto orderRequestDto) {

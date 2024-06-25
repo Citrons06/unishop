@@ -1,15 +1,23 @@
 package my.unishop.orders.domain.cart.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import my.unishop.orders.domain.cart.entity.Cart;
+import my.unishop.orders.domain.cart.entity.CartItem;
 
-@Getter @Setter
-@NoArgsConstructor
+import java.util.List;
+
+@Getter
+@Setter
 public class CartResponseDto {
+    private String memberId;
+    private List<CartItem> items;
+    private int totalQuantity;
+    private int totalPrice;
 
-    private Long id;
-    private Integer totalPrice;
-    private Integer itemCount;
+    public CartResponseDto(String memberId, List<CartItem> items) {
+        this.memberId = memberId;
+        this.items = items;
+        this.totalQuantity = items.stream().mapToInt(CartItem::getQuantity).sum();
+        this.totalPrice = items.stream().mapToInt(item -> item.getPrice() * item.getQuantity()).sum();
+    }
 }

@@ -8,18 +8,18 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    @Query("SELECT i FROM Item i WHERE i.itemName LIKE %:name%")
+    @Query("SELECT DISTINCT i FROM Item i LEFT JOIN FETCH i.itemImgList LEFT JOIN i.category WHERE i.itemName LIKE %:name%")
     Page<Item> findByItemNameContaining(String name, Pageable pageable);
 
-    @Query("SELECT i FROM Item i WHERE i.category.id = :categoryId AND i.itemName LIKE %:name%")
+    @Query("SELECT DISTINCT i FROM Item i LEFT JOIN FETCH i.itemImgList LEFT JOIN i.category WHERE i.category.id = :categoryId AND i.itemName LIKE %:name%")
     Page<Item> findByCategoryIdAndItemNameContaining(Long categoryId, String name, Pageable pageable);
 
-    @Query("SELECT i FROM Item i")
+    @Query("SELECT DISTINCT i FROM Item i LEFT JOIN FETCH i.itemImgList LEFT JOIN i.category")
     Page<Item> findAllWithImagesAndCategory(Pageable pageable);
 
-    @Query("SELECT i FROM Item i WHERE i.category.id = :categoryId")
+    @Query("SELECT DISTINCT i FROM Item i LEFT JOIN FETCH i.itemImgList LEFT JOIN i.category WHERE i.category.id = :categoryId")
     Page<Item> findByCategoryId(Long categoryId, Pageable pageable);
 
-    @Query("SELECT i FROM Item i WHERE i.id = :id")
+    @Query("SELECT i FROM Item i LEFT JOIN FETCH i.itemImgList LEFT JOIN i.category WHERE i.id = :id")
     Item findItemById(Long id);
 }

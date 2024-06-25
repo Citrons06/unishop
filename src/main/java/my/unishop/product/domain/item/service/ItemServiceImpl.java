@@ -53,4 +53,10 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findItemById(id);
         item.updateStock(quantity);
     }
+
+    @Override
+    public void updateItemSellCount(Long id, int quantity) {
+        Item item = itemRepository.findItemById(id);
+        item.updateItemSellCount(quantity);
+    }
 }

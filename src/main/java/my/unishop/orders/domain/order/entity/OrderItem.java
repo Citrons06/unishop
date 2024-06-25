@@ -27,4 +27,15 @@ public class OrderItem extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
+
+    public OrderItem(Order order, Item item, int quantity, Integer price) {
+        this.order = order;
+        this.item = item;
+        this.count = quantity;
+        this.orderPrice = price;
+    }
+
+    public int getTotalPrice() {
+        return orderPrice * count;
+    }
 }

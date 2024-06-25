@@ -18,6 +18,7 @@ public class ItemResponseDto {
     private String itemName;
     private int price;
     private int quantity;
+    private boolean hasImages;
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
@@ -33,9 +34,6 @@ public class ItemResponseDto {
         this.itemImgList = item.getItemImgList().stream()
                 .map(ItemImgResponseDto::new)
                 .collect(Collectors.toList());
-    }
-
-    public static List<ItemResponseDto> listFromItems(List<Item> items) {
-        return items.stream().map(ItemResponseDto::new).toList();
+        this.hasImages = !this.itemImgList.isEmpty();
     }
 }

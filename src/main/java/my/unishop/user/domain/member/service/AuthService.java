@@ -1,6 +1,7 @@
 package my.unishop.user.domain.member.service;
 
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,21 +44,29 @@ public class AuthService {
 
             refreshTokenRepository.save(new RefreshToken(username, refreshToken));
 
-            response.addHeader("RefreshToken", refreshToken);
-            response.addHeader("AccessToken", accessToken);
+            Cookie accessTokenCookie = new Cookie("AccessToken", accessToken);
+            accessTokenCookie.setHttpOnly(true);
+            //accessTokenCookie.setSecure(true); // HTTPS만 사용하도록 설정
+            accessTokenCookie.setPath("/");
+            accessTokenCookie.setMaxAge(60 * 60 * 1000);
 
-            LoginResponseDto loginResponseDto = new LoginResponseDto(username, accessToken, refreshToken);
-            loginResponseDto.setUsername(username);
-            loginResponseDto.setAccessToken(accessToken);
-            loginResponseDto.setRefreshToken(refreshToken);
+            Cookie refreshTokenCookie = new Cookie("RefreshToken", refreshToken);
+            refreshTokenCookie.setHttpOnly(true);
+            //refreshTokenCookie.setSecure(true); // HTTPS만 사용하도록 설정
+            refreshTokenCookie.setPath("/");
+            refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60 * 1000);
 
-            return loginResponseDto;
+            response.addCookie(accessTokenCookie);
+            response.addCookie(refreshTokenCookie);
+
+            return new LoginResponseDto(username, accessToken, refreshToken);
 
         } catch (Exception e) {
             log.error("Error authenticating user", e);
             throw new IllegalArgumentException("회원 정보가 일치하지 않습니다.");
         }
     }
+
 
     public void logout(String refreshToken) {
         if (jwtUtil.validateToken(refreshToken)) {

@@ -9,4 +9,6 @@ public interface MemberService {
     boolean verifyEmail(String email, String token);
 
     MemberResponseDto updateMember(String username, MemberRequestDto memberRequestDto);
+
+    MemberResponseDto findMember(String username);
 }

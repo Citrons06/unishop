@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import my.unishop.common.jwt.filter.JwtAuthenticationFilter;
 import my.unishop.common.jwt.filter.JwtAuthorizationFilter;
 import my.unishop.common.util.JwtUtil;
-import my.unishop.common.jwt.repository.RefreshTokenRepository;
 import my.unishop.common.security.UserDetailsServiceImpl;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -24,8 +23,6 @@ public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -33,18 +30,9 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, refreshTokenRepository, authenticationManager(authenticationConfiguration));
-        return filter;
-    }
-
-    @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(jwtUtil, userDetailsService);
+
         http.csrf((csrf) -> csrf.disable());
 
         http.sessionManagement((sessionManagement) ->
@@ -57,8 +45,7 @@ public class WebSecurityConfig {
                         .anyRequest().permitAll()
         );
 
-        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtAuthenticationFilter(), JwtAuthorizationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

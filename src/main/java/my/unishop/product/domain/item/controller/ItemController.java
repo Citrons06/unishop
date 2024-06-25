@@ -59,4 +59,12 @@ public class ItemController {
         model.addAttribute("item", item);
         return "items/itemDetail";
     }
+
+    // 상품 상세 화면에서 바로 주문하기
+    @GetMapping("/item/order")
+    public String orderFromItem(Model model, Long itemId) {
+        ItemResponseDto item = itemService.getItem(itemId);
+        model.addAttribute("item", item);
+        return "order/orderConfirm";
+    }
 }

@@ -74,13 +74,19 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    @Override
     //회원 정보 수정
+    @Override
     public MemberResponseDto updateMember(String username, MemberRequestDto memberRequestDto) {
         Member member = memberRepository.findByUsername(username);
         memberRequestDto.setPassword(passwordEncoder.encode(memberRequestDto.getPassword()));
         member.updateMember(memberRequestDto);
 
+        return new MemberResponseDto(member);
+    }
+
+    @Override
+    public MemberResponseDto findMember(String username) {
+        Member member = memberRepository.findByUsername(username);
         return new MemberResponseDto(member);
     }
 }

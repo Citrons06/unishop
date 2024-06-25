@@ -28,7 +28,7 @@ public class Item extends BaseEntity {
 
     private Integer quantity;
 
-    private Integer item_sell_count;
+    private Integer itemSellCount = 0;
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
@@ -46,6 +46,7 @@ public class Item extends BaseEntity {
         this.quantity = itemRequestDto.getQuantity();
         this.itemSellStatus = itemRequestDto.getItemSellStatus();
         this.category = category;
+        this.itemSellCount = 0;
     }
 
     public void updateItem(ItemRequestDto itemRequestDto, Category category) {
@@ -72,7 +73,14 @@ public class Item extends BaseEntity {
         }
     }
 
-    public void increaseStock(int quantity) {
-        this.quantity += quantity;
+    public void updateStock(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void updateItemSellCount(int quantity) {
+        if (this.itemSellCount == null) {
+            this.itemSellCount = 0;
+        }
+        this.itemSellCount += quantity;
     }
 }

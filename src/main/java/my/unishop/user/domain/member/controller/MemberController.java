@@ -1,17 +1,18 @@
 package my.unishop.user.domain.member.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.unishop.common.util.JwtUtil;
 import my.unishop.common.jwt.service.BlackListTokenService;
 import my.unishop.user.domain.member.dto.MemberRequestDto;
+import my.unishop.user.domain.member.dto.MemberResponseDto;
 import my.unishop.user.domain.member.service.AuthService;
-import my.unishop.user.domain.member.service.MemberServiceImpl;
+import my.unishop.user.domain.member.service.MemberService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
@@ -22,7 +23,7 @@ import java.util.Map;
 public class MemberController {
 
     private final AuthService authService;
-    private final MemberServiceImpl memberService;
+    private final MemberService memberService;
     private final BlackListTokenService blackListTokenService;
     private final JwtUtil jwtUtil;
 
@@ -49,6 +50,41 @@ public class MemberController {
     public String loginPage() {
         return "member/login";
     }
+
+    // 마이페이지
+    @GetMapping("/mypage")
+    public String mypage(Model model, HttpServletRequest request) {
+        String token = jwtUtil.resolveToken(request);
+
+        if (token != null && jwtUtil.validateToken(token)) {
+            String username = jwtUtil.getUsernameFromToken(token);
+            MemberResponseDto member = memberService.findMember(username);
+
+            model.addAttribute("member", member);
+        } else {
+            // 토큰이 유효하지 않은 경우 로그인 페이지로 리다이렉트
+            return "redirect:/user/login-page";
+        }
+
+        return "member/mypage";
+    }
+
+    @PatchMapping("/mypage")
+    public String mypage(@ModelAttribute("member") MemberRequestDto memberRequestDto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        String token = jwtUtil.resolveToken(request);
+
+        if (token != null && jwtUtil.validateToken(token)) {
+            String username = jwtUtil.getUsernameFromToken(token);
+            memberService.updateMember(username, memberRequestDto);
+            redirectAttributes.addFlashAttribute("successMessage", "정보가 성공적으로 업데이트되었습니다.");
+
+        } else {
+            return "redirect:/user/mypage";
+        }
+
+        return "member/mypage";
+    }
+
 
     // 회원가입
     @PostMapping("/signup")

@@ -28,6 +28,9 @@ public class Order extends BaseEntity {
     private LocalDateTime orderDate = LocalDateTime.now();
 
     @Setter
+    private Integer orderPrice;
+
+    @Setter
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
@@ -35,9 +38,9 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member user;
 
-    private String order_username;
+    private String orderUsername;
     private Address orderAddress;
-    private String order_tel;
+    private String orderTel;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -45,12 +48,13 @@ public class Order extends BaseEntity {
     private LocalDateTime returnRequestDate;
 
     @Builder
-    public Order(Member user, String order_username, Address orderAddress, String order_tel, OrderStatus orderStatus) {
+    public Order(Member user, String orderUsername, Address orderAddress, String orderTel, OrderStatus orderStatus, Integer orderPrice) {
         this.user = user;
-        this.order_username = order_username;
+        this.orderUsername = orderUsername;
         this.orderAddress = orderAddress;
-        this.order_tel = order_tel;
+        this.orderTel = orderTel;
         this.orderStatus = orderStatus;
+        this.orderPrice = orderPrice;
     }
 
     public void cancel() {
@@ -58,7 +62,7 @@ public class Order extends BaseEntity {
     }
 
     public void returnOrder() {
-        if (orderStatus != OrderStatus.DELIVERY_COMPLETE) {
+        if (orderStatus != OrderStatus.DELIVERED) {
             throw new IllegalStateException("배송 완료된 상품만 반품이 가능합니다.");
         }
 
@@ -79,6 +83,11 @@ public class Order extends BaseEntity {
     }
 
     public void completeDelivery() {
-        this.orderStatus = OrderStatus.DELIVERY_COMPLETE;
+        this.orderStatus = OrderStatus.DELIVERED;
+    }
+
+    // 주문의 총 금액 계산
+    public int getTotalPrice() {
+        return orderItems.stream().mapToInt(OrderItem::getTotalPrice).sum();
     }
 }
