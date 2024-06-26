@@ -1,1 +1,2 @@
 rootProject.name = 'UniShop'
+include 'common', 'user-service', 'product-service', 'order-service'

@@ -61,7 +61,7 @@ public class OrderService {
                 .orderAddress(new Address(orderRequestDto.getCity(), orderRequestDto.getStreet(), orderRequestDto.getZipcode()))
                 .orderTel(orderRequestDto.getOrder_tel())
                 .user(member)
-                .orderStatus(ORDERED)
+                .orderStatus(OrderStatus.ORDERED)
                 .build();
 
         // 주문 항목 생성 및 추가
@@ -120,7 +120,7 @@ public class OrderService {
     // 반품 처리 되었던 상품 재고 회복
     @Scheduled(fixedRate = 60 * 1000) // 1분마다 실행
     public void updateStockQuantity() {
-        orderRepository.findByOrderStatusAndReturnRequestDateBefore(RETURN_REQUESTED, LocalDateTime.now().minusDays(3))
+        orderRepository.findByOrderStatusAndReturnRequestDateBefore(OrderStatus.RETURN_REQUESTED, LocalDateTime.now().minusDays(3))
                 .forEach(order -> {
                     order.completeReturn();
                     for (OrderItem orderItem : order.getOrderItems()) {
@@ -135,7 +135,7 @@ public class OrderService {
     // 주문 상태 업데이트
     @Scheduled(fixedRate = 60 * 1000) // 1분마다 실행
     public void updateOrderStatus() {
-        List<Order> orders = orderRepository.findByOrderStatus(ORDERED);
+        List<Order> orders = orderRepository.findByOrderStatus(OrderStatus.ORDERED);
 
         for (Order order : orders) {
             if (order.getOrderDate().plusDays(1).isBefore(LocalDateTime.now())) {
