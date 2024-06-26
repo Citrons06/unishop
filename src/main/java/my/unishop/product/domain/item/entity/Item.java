@@ -18,7 +18,7 @@ import static my.unishop.product.domain.item.entity.ItemSellStatus.SOLD_OUT;
 public class Item extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
 

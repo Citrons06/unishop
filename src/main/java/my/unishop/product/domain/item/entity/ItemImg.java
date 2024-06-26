@@ -13,7 +13,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 public class ItemImg {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_img_id")
     private Long id;
 
